@@ -26,7 +26,8 @@ import openpyxl
 from openpyxl import workbook 
 from openpyxl import load_workbook
 from flask import Flask, send_file, make_response
-
+import requests
+from io import BytesIO
 import colorlover as cl
 
 def mensal_bar(mes,tipo,ano,link,df): #ex: 1,Presencial
@@ -119,6 +120,10 @@ def convert_to_time(decimal_num):
 
 
 def preenche_modelo(mes,ano,nome,df): #ex: 1,Presencial
+	url = 'https://github.com/Grenda07/ppgtu/blob/main/src/modelo.xlsx?raw=true'
+	response = requests.get(url)
+	content = response.content
+	file = BytesIO(content)
 	grupos=['Grupo de Pesquisa','Programa']
 	tipo=['Presencial','Remoto']
 	df['DATA'] = pd.to_datetime(df['DATA'], dayfirst=True)
@@ -128,7 +133,7 @@ def preenche_modelo(mes,ano,nome,df): #ex: 1,Presencial
 	locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
 	month_name = datetime.date(2000, mes, 1).strftime('%B')
 	month_name = month_name.capitalize()
-	wb = load_workbook('modelo.xlsx')
+	wb = load_workbook(file)
 	sheets = wb.sheetnames
 	Sheet1 = wb[sheets[0]] ##
 	Sheet1.cell(row = 3, column = 1).value = nome
