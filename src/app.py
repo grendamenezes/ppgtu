@@ -5,6 +5,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import pandas as pd
+from datetime import datetime
 import datetime
 import base64
 import locale
@@ -14,7 +15,7 @@ import io
 import matplotlib.pyplot as plt
 from plotly.offline import plot
 import numpy as np
-import plotly.offline as py
+import plotly.offline as offline
 import plotly.graph_objs as go
 import plotly.express as px
 import tempfile
@@ -25,7 +26,7 @@ import openpyxl
 from openpyxl import workbook 
 from openpyxl import load_workbook
 from flask import Flask, send_file, make_response
-from datetime import datetime
+
 import colorlover as cl
 
 def mensal_bar(mes,tipo,ano,link,df): #ex: 1,Presencial
@@ -49,7 +50,7 @@ def mensal_bar(mes,tipo,ano,link,df): #ex: 1,Presencial
 	
 def diario_bar (dia,tipo,df): #ex: 10/01/2022,Remoto
 	df['DATA'] = pd.to_datetime(df['DATA'], dayfirst=True)
-	dia        = datetime.strptime(dia, '%d/%m/%Y')
+	dia        = datetime.datetime.strptime(dia, '%d/%m/%Y')
 	df         = df[df['DATA']== dia]
 	if tipo   != 'todos':
 		df     = df[df['tipo']== tipo]
@@ -342,7 +343,7 @@ def update_graphs_3(n_clicks,tipo, date,contents, filename):
 	if not date:
 		return {}
 	df = retorna_df(contents, filename)
-	fig = diario_bar (date,tipo)
+	fig = diario_bar (date,tipo,df)
 	if fig == 'nan':
 		return {}
 	else:
