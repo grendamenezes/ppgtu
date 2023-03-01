@@ -169,7 +169,6 @@ def preenche_modelo(mes,ano,nome,df): #ex: 1,Presencial
 			ws2[cell.coordinate].value = cell.value
 	new_file_name = 'relatorio_'+month_name+'.xlsx'
 	wb.save(new_file_name)
-	os.remove('temp.xlsx')
 	return new_file_name
 
 def download_zip(mes,ano,nome,df):
