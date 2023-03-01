@@ -41,7 +41,7 @@ def mensal_bar(mes,tipo,ano,link,df): #ex: 1,Presencial
 		df['Hora'] = df['HORAS'].apply(lambda x: x.hour + x.minute / 60 + x.second / 3600)
 		df_sum     = df.groupby(['GRUPO','SUBCATEGORIA']).agg({'Hora': 'sum'}).reset_index()
 		gray_palette = cl.scales['9']['seq']['Greys']
-		fig = px.bar(df_sum, x='Hora', y='GRUPO', color='SUBCATEGORIA', orientation='h',color_discrete_sequence=gray_palette)
+		fig = px.bar(df_sum, x='Hora', y='GRUPO', color='SUBCATEGORIA', orientation='h')
 		fig.update_layout(title='Horas total trabalhadas por categoria e subcategoria')
 		fig.update_layout( xaxis_title='Horas',yaxis_title='Categoria',legend_title='Subcategoria')
 		if link == 1:
