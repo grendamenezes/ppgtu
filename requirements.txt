@@ -1,0 +1,15 @@
+colorlover==0.3.0
+dash==2.8.1
+dash_core_components==2.0.0
+dash_html_components==2.0.0
+docx==0.2.4
+docxtpl==0.16.5
+Flask==2.2.3
+matplotlib==3.7.0
+numpy==1.24.2
+openpyxl==3.1.1
+pandas==1.5.3
+plotly==5.13.1
+python_docx==0.8.11
+gunicorn
+dash-tools
