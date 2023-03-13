@@ -101,8 +101,8 @@ def mensal_todos(mes,ano,link,df): #ex: 1
 		return 'nan'
 	else:
 		df['Hora'] = df['HORAS'].apply(lambda x: x.hour + x.minute / 60 + x.second / 3600)
-		df_sum     = df.groupby(['tipo']).agg({'Hora': 'sum'}).reset_index()
-		fig        = px.bar(df_sum, x='tipo', y='Hora', color='tipo', orientation='v')
+		df_sum     = df.groupby(['TIPO']).agg({'Hora': 'sum'}).reset_index()
+		fig        = px.bar(df_sum, x='TIPO', y='Hora', color='TIPO', orientation='v')
 		fig.update_layout(yaxis_title='Horas',xaxis_title=' ',legend_title='Tipo')
 		fig.update_layout(title='Horas total trabalhadas por tipo')
 		if link ==1:
