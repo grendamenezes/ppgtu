@@ -177,7 +177,7 @@ def download_zip(mes,ano,nome,df):
 	month_name = month_name.capitalize()	
 	zip_path = 'relatorio_'+month_name+'.zip'
 	with zipfile.ZipFile(zip_path, 'w') as zip_file:
-		zip_file.write(preenche_modelo(mes,ano,nome,df))
+		#zip_file.write(preenche_modelo(mes,ano,nome,df))
 		zip_file.writestr('horas_'+month_name+'_Presencial.html', mensal_bar(mes,'Presencial',ano,1,df))
 		zip_file.writestr('horas_'+month_name+'_Remoto.html', mensal_bar(mes,'Remoto',ano,1,df))
 		zip_file.writestr('horas_'+month_name+'_todos.html', mensal_bar(mes,'todos',ano,1,df))
