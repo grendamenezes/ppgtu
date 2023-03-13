@@ -185,7 +185,7 @@ def download_zip(mes,ano,nome,df):
 		zip_file.writestr('horas_por_dia_'+month_name+'_Remoto.html', mensal_line(mes,'Remoto',ano,1,df))
 		zip_file.writestr('horas_por_dia_'+month_name+'_todos.html', mensal_line(mes,'todos',ano,1,df))
 		zip_file.writestr('horas_por_tipo_'+month_name+'.html', mensal_todos(mes,ano,1,df))
-	return dcc.send_file(zip_path, filename=zip_path, as_attachment=True)
+	return dcc.send_file(mensal_bar(mes,'Presencial',ano,1,df), filename=zip_path)
 	
 def retorna_df(contents, filename):
 	contents=str(contents[0])
