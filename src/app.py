@@ -34,7 +34,7 @@ def mensal_bar(mes,tipo,ano,link,df): #ex: 1,Presencial
 	df         = df.loc[df['DATA'].dt.month == mes]
 	df         = df.loc[df['DATA'].dt.year == ano]
 	if tipo   != 'todos':
-		df     = df[df['tipo']== tipo]
+		df     = df[df['TIPO']== tipo]
 	if len(df)==0:
 		return 'nan'
 	else:
@@ -53,7 +53,7 @@ def diario_bar (dia,tipo,df): #ex: 10/01/2022,Remoto
 	dia        = datetime.datetime.strptime(dia, '%d/%m/%Y')
 	df         = df[df['DATA']== dia]
 	if tipo   != 'todos':
-		df     = df[df['tipo']== tipo]
+		df     = df[df['TIPO']== tipo]
 	if len(df)==0:
 		return 'nan'
 	else:
@@ -74,7 +74,7 @@ def mensal_line(mes,tipo,ano,link,df): #ex: 1,Remoto
 	df         = df.loc[df['DATA'].dt.month == mes]
 	df         = df.loc[df['DATA'].dt.year == ano]
 	if tipo   != 'todos':
-		df     = df[df['tipo']== tipo]
+		df     = df[df['TIPO']== tipo]
 	if len(df)==0:
 		return 'nan'
 	else:
