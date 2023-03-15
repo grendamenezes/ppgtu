@@ -45,17 +45,16 @@ def preenche_modelo(mes,ano,nome,df): #ex: 1,Presencial
 	response = requests.get(url)
 	content = response.content
 	file = io.BytesIO(content)
-	'''
 	grupos=['Grupo de Pesquisa','Programa']
 	tipo=['Presencial','Remoto']
 	df['DATA'] = pd.to_datetime(df['DATA'], dayfirst=True)
 	df         = df.loc[df['DATA'].dt.month == mes]
 	df         = df.loc[df['DATA'].dt.year == ano]
 	df['Hora'] = df['HORAS'].apply(lambda x: x.hour + x.minute / 60 + x.second / 3600)
-	locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
+	#locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
 	month_name = datetime.date(2000, mes, 1).strftime('%B')
 	month_name = month_name.capitalize()
-	'''
+	print(month_name)
 	wb = load_workbook(file)
 	'''
 	sheets = wb.sheetnames
