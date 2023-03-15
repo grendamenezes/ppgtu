@@ -56,7 +56,6 @@ def preenche_modelo(mes,ano,nome,df): #ex: 1,Presencial
 	month_name = month_name.capitalize()
 	print(month_name)
 	wb = load_workbook(file)
-	'''
 	sheets = wb.sheetnames
 	Sheet1 = wb[sheets[0]] ##
 	Sheet1.cell(row = 3, column = 1).value = nome
@@ -91,7 +90,6 @@ def preenche_modelo(mes,ano,nome,df): #ex: 1,Presencial
 	for row in temp_wb['Dados detalhados']:
 		for cell in row:
 			ws2[cell.coordinate].value = cell.value
-	'''
 	new_file_name = 'relatorio_.xlsx'
 	wb.save(new_file_name)
 	return new_file_name
