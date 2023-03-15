@@ -45,6 +45,7 @@ def preenche_modelo(mes,ano,nome,df): #ex: 1,Presencial
 	response = requests.get(url)
 	content = response.content
 	file = io.BytesIO(content)
+	'''
 	grupos=['Grupo de Pesquisa','Programa']
 	tipo=['Presencial','Remoto']
 	df['DATA'] = pd.to_datetime(df['DATA'], dayfirst=True)
@@ -54,6 +55,7 @@ def preenche_modelo(mes,ano,nome,df): #ex: 1,Presencial
 	locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
 	month_name = datetime.date(2000, mes, 1).strftime('%B')
 	month_name = month_name.capitalize()
+	'''
 	wb = load_workbook(file)
 	'''
 	sheets = wb.sheetnames
@@ -91,7 +93,7 @@ def preenche_modelo(mes,ano,nome,df): #ex: 1,Presencial
 		for cell in row:
 			ws2[cell.coordinate].value = cell.value
 	'''
-	new_file_name = 'relatorio_'+month_name+'.xlsx'
+	new_file_name = 'relatorio_.xlsx'
 	wb.save(new_file_name)
 	return new_file_name
 
