@@ -2,9 +2,9 @@ import dash
 import dash_html_components as html
 import dash_table
 import dash_core_components as dcc
-from dash.dependencies import Input, Output, State
+from   dash.dependencies import Input, Output, State
 import pandas as pd
-from datetime import datetime
+from   datetime import datetime
 import datetime
 import base64
 import locale
@@ -12,7 +12,7 @@ import graficos
 import zipfile
 import io
 import matplotlib.pyplot as plt
-from plotly.offline import plot
+from   plotly.offline import plot
 import numpy as np
 import plotly.offline as offline
 import plotly.graph_objs as go
@@ -22,9 +22,9 @@ import os
 import calendar
 import graficos
 import openpyxl
-from openpyxl import workbook 
-from openpyxl import load_workbook
-from flask import Flask, send_file, make_response
+from   openpyxl import workbook 
+from   openpyxl import load_workbook
+from   flask import Flask, send_file, make_response
 import requests
 import colorlover as cl
 
@@ -55,6 +55,7 @@ def preenche_modelo(mes,ano,nome,df): #ex: 1,Presencial
 	month_name = datetime.date(2000, mes, 1).strftime('%B')
 	month_name = month_name.capitalize()
 	wb = load_workbook(file)
+	'''
 	sheets = wb.sheetnames
 	Sheet1 = wb[sheets[0]] ##
 	Sheet1.cell(row = 3, column = 1).value = nome
@@ -89,17 +90,10 @@ def preenche_modelo(mes,ano,nome,df): #ex: 1,Presencial
 	for row in temp_wb['Dados detalhados']:
 		for cell in row:
 			ws2[cell.coordinate].value = cell.value
+	'''
 	new_file_name = 'relatorio_'+month_name+'.xlsx'
 	wb.save(new_file_name)
 	return new_file_name
-'''
-df = pd.DataFrame({
-    'Nome': ['Alice', 'Bob', 'Charlie', 'David'],
-    'Idade': [25, 30, 35, 40],
-    'Cidade': ['Rio de Janeiro', 'São Paulo', 'Belo Horizonte', 'Curitiba']
-})
-'''
-
 
 # Criando o aplicativo Dash
 app = dash.Dash(__name__)
