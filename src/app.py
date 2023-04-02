@@ -40,18 +40,18 @@ def mensal_bar(mes,tipo,ano,link,df): #ex: 1,Presencial
         df['Hora'] = df['HORAS'].apply(lambda x: x.hour + x.minute / 60 + x.second / 3600)
         df_sum     = df.groupby(['GRUPO','SUBCATEGORIA']).agg({'Hora': 'sum'}).reset_index()
         red_palette = ['#FFCDD2', '#EF9A9A', '#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#FF8A80', '#FF5252', '#FF1744', '#D50000', '#FF80AB', '#FF4081', '#F50057', '#C51162', '#880E4F', '#FF9E80', '#FF6E40']
-		gray_palette = ['#FAFAFA', '#F5F5F5', '#EEEEEE', '#E0E0E0', '#BDBDBD', '#9E9E9E', '#757575', '#616161', '#424242', '#212121', '#ECEFF1', '#CFD8DC', '#B0BEC5', '#90A4AE', '#78909C', '#607D8B', '#546E7A', '#455A64', '#37474F', '#263238']
-		dic={}
-		a=0
-		df1=df_sum.loc[df_sum['GRUPO'] == 'Programa']
-		for i in df1['SUBCATEGORIA']:
-			dic[i]=red_palette[a]
-			a+=1
-		a=0
-		df2=df_sum.loc[df_sum['GRUPO'] == 'Grupo de Pesquisa']
-		for i in df2['SUBCATEGORIA']:
-			dic[i]=gray_palette[a]
-			a+=1		
+	gray_palette = ['#FAFAFA', '#F5F5F5', '#EEEEEE', '#E0E0E0', '#BDBDBD', '#9E9E9E', '#757575', '#616161', '#424242', '#212121', '#ECEFF1', '#CFD8DC', '#B0BEC5', '#90A4AE', '#78909C', '#607D8B', '#546E7A', '#455A64', '#37474F', '#263238']
+	dic={}
+	a=0
+	df1=df_sum.loc[df_sum['GRUPO'] == 'Programa']
+	for i in df1['SUBCATEGORIA']:
+		dic[i]=red_palette[a]
+		a+=1
+	a=0
+	df2=df_sum.loc[df_sum['GRUPO'] == 'Grupo de Pesquisa']
+	for i in df2['SUBCATEGORIA']:
+		dic[i]=gray_palette[a]
+		a+=1		
         fig = px.bar(df_sum, x='Hora', y='GRUPO', color='SUBCATEGORIA', orientation='h',color_discrete_map=dic)
         fig.update_layout(title='Horas total trabalhadas por categoria e subcategoria')
         fig.update_layout( xaxis_title='Horas',yaxis_title='Categoria',legend_title='Subcategoria')
