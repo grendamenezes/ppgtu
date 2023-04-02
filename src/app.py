@@ -40,11 +40,12 @@ def mensal_bar(mes,tipo,ano,link,df): #ex: 1,Presencial
 	else:
 		df['Hora'] = df['HORAS'].apply(lambda x: x.hour + x.minute / 60 + x.second / 3600)
 		df_sum     = df.groupby(['GRUPO','SUBCATEGORIA']).agg({'Hora': 'sum'}).reset_index()
-		#paleta_greys = ['#1A1A1A', '#333333', '#404040', '#4D4D4D', '#595959', '#666666', '#737373', '#7F7F7F', '#8C8C8C', '#999999', '#A6A6A6', '#B2B2B2', '#BFBFBF', '#CCCCCC', '#D9D9D9', '#E5E5E5', '#F2F2F2', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF']
-		#paleta_preto_vermelho = ['#000000', '#200000', '#400000', '#600000', '#800000', '#A00000', '#C00000', '#D40000', '#E80000', '#FC0000', '#FF1414', '#FF2828', '#FF3C3C', '#FF5050', '#FF6464', '#FF7878', '#FF8C8C', '#FFA0A0', '#FFB4B4', '#FFC8C8', '#FFE6E6', '#FFF4E6', '#FFFCE6', '#FFFFE6', '#F0E0B5', '#D4AF37', '#B8860B', '#996515', '#7F5217', '#604020']
-		
-		red_palette = ['#FFCDD2', '#EF9A9A', '#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#FF8A80', '#FF5252', '#FF1744', '#D50000', '#FF80AB', '#FF4081', '#F50057', '#C51162', '#880E4F', '#FF9E80', '#FF6E40']
-		gray_palette = ['#FAFAFA', '#F5F5F5', '#EEEEEE', '#E0E0E0', '#BDBDBD', '#9E9E9E', '#757575', '#616161', '#424242', '#212121', '#ECEFF1', '#CFD8DC', '#B0BEC5', '#90A4AE', '#78909C', '#607D8B', '#546E7A', '#455A64', '#37474F', '#263238']
+		red_palette = ['#700404', '#831919', '#962E2E', '#AA4444', '#BD5A5A', '#D07070', '#E38686', '#F19C9C', '#FFB2B2', '#FFC1C1', '#FFCFCF', '#FFD8D8', '#FFE1E1', '#FFEAEA', '#FFF2F2', '#FFF9F9', '#FFFDFD', '#FFCDD2']
+		gray_palette = ['#FAFAFA', '#EEEEEE', '#BDBDBD', '#9E9E9E', '#757575', '#616161', '#424242', '#212121', '#ECEFF1', '#CFD8DC', '#B0BEC5', '#90A4AE', '#78909C', '#607D8B', '#546E7A', '#455A64', '#37474F', '#263238']
+		gray_palette.reverse()
+		duplicated_values = df.groupby('SUBCATEGORIA')['GRUPO'].nunique().loc[lambda x: x == 2].index
+		for n in list(duplicated_values):
+			df_sum.loc[(df_sum['GRUPO'] == 'Programa') & (df_sum['SUBCATEGORIA'] == n), 'SUBCATEGORIA'] = (n+' ')
 		dic={}
 		a=0
 		df1=df_sum.loc[df_sum['GRUPO'] == 'Programa']
@@ -56,6 +57,7 @@ def mensal_bar(mes,tipo,ano,link,df): #ex: 1,Presencial
 		for i in df2['SUBCATEGORIA']:
 			dic[i]=gray_palette[a]
 			a+=1		
+		
 		fig = px.bar(df_sum, x='Hora', y='GRUPO', color='SUBCATEGORIA', orientation='h',color_discrete_map=dic)
 		fig.update_layout(title='Horas total trabalhadas por categoria e subcategoria')
 		fig.update_layout( xaxis_title='Horas',yaxis_title='Categoria',legend_title='Subcategoria')
@@ -65,22 +67,40 @@ def mensal_bar(mes,tipo,ano,link,df): #ex: 1,Presencial
 		return fig
     
 def diario_bar (dia,tipo,df): #ex: 10/01/2022,Remoto
-    df['DATA'] = pd.to_datetime(df['DATA'], dayfirst=True)
-    dia        = datetime.datetime.strptime(dia, '%d/%m/%Y')
-    df         = df[df['DATA']== dia]
-    if tipo   != 'todos':
-        df     = df[df['TIPO']== tipo]
-    if len(df)==0:
-        return 'nan'
-    else:
-        paleta_greys = ['#000000', '#1c1c1c', '#393939', '#555555', '#717171', '#8e8e8e', '#aaaaaa', '#c7c7c7', '#e3e3e3', '#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff', '#ffffff']
-        df['Hora'] = df['HORAS'].apply(lambda x: x.hour + x.minute / 60 + x.second / 3600)
-        df_sum     = df.groupby(['GRUPO','SUBCATEGORIA']).agg({'Hora': 'sum'}).reset_index()
-        fig = px.bar(df_sum, x='Hora', y='GRUPO', color='SUBCATEGORIA', orientation='h',color_discrete_sequence=list(paleta_greys))
-        fig.update_layout( xaxis_title='Horas',yaxis_title='Categoria',legend_title='Subcategoria')
-        fig.update_layout(title='Horas total trabalhadas no dia por categoria e subcategoria')
-        fig.update_traces(marker=dict(line=dict(width=1, color='black')))
-        return fig
+	df['DATA'] = pd.to_datetime(df['DATA'], dayfirst=True)
+	dia        = datetime.datetime.strptime(dia, '%d/%m/%Y')
+	df         = df[df['DATA']== dia]
+	if tipo   != 'todos':
+		df     = df[df['TIPO']== tipo]
+	if len(df)==0:
+		return 'nan'
+	else:
+		df['Hora'] = df['HORAS'].apply(lambda x: x.hour + x.minute / 60 + x.second / 3600)
+		df_sum     = df.groupby(['GRUPO','SUBCATEGORIA']).agg({'Hora': 'sum'}).reset_index()
+		red_palette = ['#700404', '#831919', '#962E2E', '#AA4444', '#BD5A5A', '#D07070', '#E38686', '#F19C9C', '#FFB2B2', '#FFC1C1', '#FFCFCF', '#FFD8D8', '#FFE1E1', '#FFEAEA', '#FFF2F2', '#FFF9F9', '#FFFDFD', '#FFCDD2']
+		gray_palette = ['#FAFAFA', '#EEEEEE', '#BDBDBD', '#9E9E9E', '#757575', '#616161', '#424242', '#212121', '#ECEFF1', '#CFD8DC', '#B0BEC5', '#90A4AE', '#78909C', '#607D8B', '#546E7A', '#455A64', '#37474F', '#263238']
+		gray_palette.reverse()
+		duplicated_values = df.groupby('SUBCATEGORIA')['GRUPO'].nunique().loc[lambda x: x == 2].index
+		for n in list(duplicated_values):
+			df_sum.loc[(df_sum['GRUPO'] == 'Programa') & (df_sum['SUBCATEGORIA'] == n), 'SUBCATEGORIA'] = (n+' ')
+		dic={}
+		a=0
+		df1=df_sum.loc[df_sum['GRUPO'] == 'Programa']
+		print(df1)
+		for i in df1['SUBCATEGORIA']:
+			dic[i]=red_palette[a]
+			a+=1
+		a=0
+		df2=df_sum.loc[df_sum['GRUPO'] == 'Grupo de Pesquisa']
+		print(df2)
+		for i in df2['SUBCATEGORIA']:
+			dic[i]=gray_palette[a]
+			a+=1		
+		fig = px.bar(df_sum, x='Hora', y='GRUPO', color='SUBCATEGORIA', orientation='h',color_discrete_map=dic)
+		fig.update_layout( xaxis_title='Horas',yaxis_title='Categoria',legend_title='Subcategoria')
+		fig.update_layout(title='Horas total trabalhadas no dia por categoria e subcategoria')
+		fig.update_traces(marker=dict(line=dict(width=1, color='black')))
+		return fig
     
 def mensal_line(mes,tipo,ano,link,df): #ex: 1,Remoto
     year       = ano
@@ -97,7 +117,7 @@ def mensal_line(mes,tipo,ano,link,df): #ex: 1,Remoto
     else:
         df['Hora'] = df['HORAS'].apply(lambda x: x.hour + x.minute / 60 + x.second / 3600)
         df_sum     = df.groupby(['GRUPO','DATA']).agg({'Hora': 'sum'}).reset_index()
-        fig = px.bar(df_sum, x='DATA', y='Hora', color='GRUPO', orientation='v',color_discrete_sequence=['Black','Grey'])
+        fig = px.bar(df_sum, x='DATA', y='Hora', color='GRUPO', orientation='v',color_discrete_map={'Grupo de Pesquisa':'grey','Programa':'maroon'})
         fig.update_layout(xaxis_title='Data', yaxis_title='Horas', legend_title='Grupo')
         fig.update_layout(xaxis_range=[start_date,end_date])
         fig.update_layout(title='Horas trabalhadas por dia')
@@ -116,7 +136,7 @@ def mensal_todos(mes,ano,link,df): #ex: 1
     else:
         df['Hora'] = df['HORAS'].apply(lambda x: x.hour + x.minute / 60 + x.second / 3600)
         df_sum     = df.groupby(['TIPO']).agg({'Hora': 'sum'}).reset_index()
-        fig        = px.bar(df_sum, x='TIPO', y='Hora', color='TIPO', orientation='v',color_discrete_sequence=['Black','Grey'])
+        fig        = px.bar(df_sum, x='TIPO', y='Hora', color='TIPO', orientation='v',color_discrete_map={'Remoto':'grey','Presencial':'maroon'})
         fig.update_layout(yaxis_title='Horas',xaxis_title=' ',legend_title='Tipo')
         fig.update_layout(title='Horas total trabalhadas por tipo')
         if link ==1:
