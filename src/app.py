@@ -27,38 +27,42 @@ from openpyxl import load_workbook
 from flask import Flask, send_file, make_response
 import requests
 import colorlover as cl
+from plotly.subplots import make_subplots
 
 def mensal_bar(mes,tipo,ano,link,df): #ex: 1,Presencial
-    df['DATA'] = pd.to_datetime(df['DATA'], dayfirst=True)
-    df         = df.loc[df['DATA'].dt.month == mes]
-    df         = df.loc[df['DATA'].dt.year == ano]
-    if tipo   != 'todos':
-        df     = df[df['TIPO']== tipo]
-    if len(df)==0:
-        return 'nan'
-    else:
-        df['Hora'] = df['HORAS'].apply(lambda x: x.hour + x.minute / 60 + x.second / 3600)
-        df_sum     = df.groupby(['GRUPO','SUBCATEGORIA']).agg({'Hora': 'sum'}).reset_index()
-	red_palette = ['#FFCDD2', '#EF9A9A', '#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#FF8A80', '#FF5252', '#FF1744', '#D50000', '#FF80AB', '#FF4081', '#F50057', '#C51162', '#880E4F', '#FF9E80', '#FF6E40']
-	gray_palette = ['#FAFAFA', '#F5F5F5', '#EEEEEE', '#E0E0E0', '#BDBDBD', '#9E9E9E', '#757575', '#616161', '#424242', '#212121', '#ECEFF1', '#CFD8DC', '#B0BEC5', '#90A4AE', '#78909C', '#607D8B', '#546E7A', '#455A64', '#37474F', '#263238']
-	dic={}
-	a=0
-	df1=df_sum.loc[df_sum['GRUPO'] == 'Programa']
-	for i in df1['SUBCATEGORIA']:
-		dic[i]=red_palette[a]
-		a+=1
-	a=0
-	df2=df_sum.loc[df_sum['GRUPO'] == 'Grupo de Pesquisa']
-	for i in df2['SUBCATEGORIA']:
-		dic[i]=gray_palette[a]
-		a+=1
-	fig = px.bar(df_sum, x='Hora', y='GRUPO', color='SUBCATEGORIA', orientation='h',color_discrete_map=dic)
-	fig.update_layout(title='Horas total trabalhadas por categoria e subcategoria')
-	fig.update_layout( xaxis_title='Horas',yaxis_title='Categoria',legend_title='Subcategoria')
-	fig.update_traces(marker=dict(line=dict(width=1, color='black')))
-	if link == 1:
-		fig=offline.plot(fig,output_type='div')
-	return fig
+	df['DATA'] = pd.to_datetime(df['DATA'], dayfirst=True)
+	df         = df.loc[df['DATA'].dt.month == mes]
+	df         = df.loc[df['DATA'].dt.year == ano]
+	if tipo   != 'todos':
+		df     = df[df['TIPO']== tipo]
+	if len(df)==0:
+		return 'nan'
+	else:
+		df['Hora'] = df['HORAS'].apply(lambda x: x.hour + x.minute / 60 + x.second / 3600)
+		df_sum     = df.groupby(['GRUPO','SUBCATEGORIA']).agg({'Hora': 'sum'}).reset_index()
+		#paleta_greys = ['#1A1A1A', '#333333', '#404040', '#4D4D4D', '#595959', '#666666', '#737373', '#7F7F7F', '#8C8C8C', '#999999', '#A6A6A6', '#B2B2B2', '#BFBFBF', '#CCCCCC', '#D9D9D9', '#E5E5E5', '#F2F2F2', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF']
+		#paleta_preto_vermelho = ['#000000', '#200000', '#400000', '#600000', '#800000', '#A00000', '#C00000', '#D40000', '#E80000', '#FC0000', '#FF1414', '#FF2828', '#FF3C3C', '#FF5050', '#FF6464', '#FF7878', '#FF8C8C', '#FFA0A0', '#FFB4B4', '#FFC8C8', '#FFE6E6', '#FFF4E6', '#FFFCE6', '#FFFFE6', '#F0E0B5', '#D4AF37', '#B8860B', '#996515', '#7F5217', '#604020']
+		
+		red_palette = ['#FFCDD2', '#EF9A9A', '#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#FF8A80', '#FF5252', '#FF1744', '#D50000', '#FF80AB', '#FF4081', '#F50057', '#C51162', '#880E4F', '#FF9E80', '#FF6E40']
+		gray_palette = ['#FAFAFA', '#F5F5F5', '#EEEEEE', '#E0E0E0', '#BDBDBD', '#9E9E9E', '#757575', '#616161', '#424242', '#212121', '#ECEFF1', '#CFD8DC', '#B0BEC5', '#90A4AE', '#78909C', '#607D8B', '#546E7A', '#455A64', '#37474F', '#263238']
+		dic={}
+		a=0
+		df1=df_sum.loc[df_sum['GRUPO'] == 'Programa']
+		for i in df1['SUBCATEGORIA']:
+			dic[i]=red_palette[a]
+			a+=1
+		a=0
+		df2=df_sum.loc[df_sum['GRUPO'] == 'Grupo de Pesquisa']
+		for i in df2['SUBCATEGORIA']:
+			dic[i]=gray_palette[a]
+			a+=1		
+		fig = px.bar(df_sum, x='Hora', y='GRUPO', color='SUBCATEGORIA', orientation='h',color_discrete_map=dic)
+		fig.update_layout(title='Horas total trabalhadas por categoria e subcategoria')
+		fig.update_layout( xaxis_title='Horas',yaxis_title='Categoria',legend_title='Subcategoria')
+		fig.update_traces(marker=dict(line=dict(width=1, color='black')))
+		if link == 1:
+			fig=offline.plot(fig,output_type='div')
+		return fig
     
 def diario_bar (dia,tipo,df): #ex: 10/01/2022,Remoto
     df['DATA'] = pd.to_datetime(df['DATA'], dayfirst=True)
