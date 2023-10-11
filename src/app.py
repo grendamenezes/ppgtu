@@ -149,7 +149,8 @@ def convert_to_time(decimal_num):
     return f"{hours:02d}:{minutes:02d}"
 
 def preenche_modelo(mes,ano,nome,df): #ex: 1,Presencial
-    url = 'https://github.com/grendamenezes/ppgtu/blob/main/modelo.xlsx?raw=true'
+    #url = 'https://github.com/grendamenezes/ppgtu/blob/main/modelo.xlsx?raw=true'
+    url = 'https://github.com/grendamenezes/ppgtu/raw/main/src/modelo.xlsx?raw=true'
     response = requests.get(url)
     content = response.content
     file = io.BytesIO(content)
